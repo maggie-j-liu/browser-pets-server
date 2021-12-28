@@ -15,11 +15,11 @@ app.get("/", (req, res) => {
 
 let sockets = {};
 io.on("connection", (socket) => {
-  socket.on("init", (art) => {
-    sockets[socket.id] = art;
+  socket.on("init", (user) => {
+    sockets[socket.id] = user;
     console.log(Object.keys(sockets).length);
     socket.emit("allUsers", sockets);
-    io.emit("update", socket.id, art);
+    io.emit("update", socket.id, user);
   });
   socket.on("disconnect", () => {
     // console.log("disconnect", id);
@@ -28,8 +28,8 @@ io.on("connection", (socket) => {
     io.emit("remove", socket.id);
   });
   socket.on("artUpdate", (art) => {
-    sockets[socket.id] = art;
-    io.emit("update", socket.id, art);
+    sockets[socket.id].art = art;
+    io.emit("update", socket.id, sockets[socket.id]);
   });
   //console.log(socket.request.query);
   //console.log("New client connected");
