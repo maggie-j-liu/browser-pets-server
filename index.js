@@ -16,10 +16,9 @@ app.get("/", (req, res) => {
 let sockets = {};
 io.on("connection", (socket) => {
   socket.on("init", (art) => {
-    sockets[socket.id] = {
-      art,
-    };
+    sockets[socket.id] = art;
     console.log(Object.keys(sockets).length);
+    socket.emit("allUsers", sockets);
     io.emit("update", socket.id, art);
   });
   socket.on("disconnect", () => {
@@ -29,7 +28,7 @@ io.on("connection", (socket) => {
     io.emit("remove", socket.id);
   });
   socket.on("artUpdate", (art) => {
-    sockets[socket.id].art = art;
+    sockets[socket.id] = art;
     io.emit("update", socket.id, art);
   });
   //console.log(socket.request.query);
