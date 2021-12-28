@@ -31,6 +31,9 @@ io.on("connection", (socket) => {
     sockets[socket.id].art = art;
     io.emit("update", socket.id, sockets[socket.id]);
   });
+  socket.on("message", (message) => {
+    io.emit("message", socket.id, message);
+  });
   //console.log(socket.request.query);
   //console.log("New client connected");
 });
